@@ -15,25 +15,22 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          value: this.value,
+    return Expanded(
+      child: Row(
+        children: [
+          Checkbox(
+            value: this.value,
 
-          onChanged: (bool? value) {
-            setState(() {
-              this.value = value;
+            onChanged: (bool? value) {
+              setState(() {
+                this.value = value;
 
-            });
-          },
-        ),
-        checkBoxDecider(value),
-        Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(icon:Icon(Icons.delete),color: Colors.red,onPressed: (){
-              print("deleted todo");
-            },))
-      ],
+              });
+            },
+          ),
+          checkBoxDecider(value),
+        ],
+      ),
     );
   }
 

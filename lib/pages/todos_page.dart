@@ -20,6 +20,8 @@ class TodosPage extends StatefulWidget {
 
 class _TodosPageState extends State<TodosPage> {
   String selectedValue = "ID";
+  int todoCounter = 0;
+  int todoTotal = 0;
 
 
   @override
@@ -73,6 +75,34 @@ class _TodosPageState extends State<TodosPage> {
 
   }
 
+  Widget deleteTodoIcon(bool isTodoComplete) {
+
+    return Align(
+        alignment: Alignment.centerRight,
+        child: IconButton(icon:Icon(Icons.delete),color: Colors.red,onPressed: (){
+          print("deleted todo");
+        },));
+
+
+  }
+
+  Widget todosCompetedText(var todos){
+    int compTodos = 0;
+
+    for(var t in todos) {
+      print(t.toString());
+      if(t.completed == true){
+        compTodos += 1;
+      }else {
+
+      }
+    }
+
+    return Text("" + compTodos.toString() + "/" + todos.length.toString(),style: TextStyle(color:Colors.white,fontSize: 10,fontWeight: FontWeight.w200),textAlign: TextAlign.start,);
+  }
+
+
+
 
 
   Widget todosPageLoaded(Future todoFuture, String nameOfTheUser) {
@@ -122,28 +152,44 @@ class _TodosPageState extends State<TodosPage> {
                         print("response data is still null");
                         return CircularProgressIndicator();
                       }
-                      return ListView.builder(shrinkWrap: true,scrollDirection: Axis.vertical,physics: NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, i) {
-                            return ListView(shrinkWrap: true,scrollDirection: Axis.vertical,physics: NeverScrollableScrollPhysics(),
-                                children: [
-                                  Column(
+                      return Column(
+                        children: [
+                          ListView.builder(shrinkWrap: true,scrollDirection: Axis.vertical,physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, i) {
+                                return ListView(shrinkWrap: true,scrollDirection: Axis.vertical,physics: NeverScrollableScrollPhysics(),
                                     children: [
-                                      Row(
+                                      Column(
                                         children: [
-                                          CheckboxWidget(title: snapshot.data[i].title,)
+                                          Row(
+                                            children: [
+                                              CheckboxWidget(title: snapshot.data[i].title,),
+                                              deleteTodoIcon(snapshot.data[i].completed)
+                                            ],
+                                          ),
+                                          Divider(color: Colors.green.withOpacity(.5),)
                                         ],
-                                      ),
-                                      Divider(color: Colors.green.withOpacity(.5),)
-                                    ],
-                                  )
-                                ]
-                            );
-                          }
+                                      )
+                                    ]
+                                );
+                              }
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10,left: 7),
+                            child: Align(alignment:Alignment.centerLeft,
+                                child: Text('Completed' +':',style: TextStyle(color:Colors.white,fontSize: 10,fontWeight: FontWeight.w200),textAlign: TextAlign.start,)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10,left: 7),
+                            child: Align(alignment:Alignment.centerLeft,
+                                child: todosCompetedText(snapshot.data)
+                            ),
+                          )
+                        ],
                       );
 
                     }
-                )
+                ),
               ],
             ),
           ),
@@ -152,6 +198,8 @@ class _TodosPageState extends State<TodosPage> {
 
     );
   }
+
+
 
 
 
